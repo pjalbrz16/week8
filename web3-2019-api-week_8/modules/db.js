@@ -20,7 +20,7 @@ const dbName = process.env.DB_NAME
  */
 let connect = () => {
     return new Promise((resolve, reject) => {
-        console.log("Voici l'uri : ", url, process.env)
+        console.log("Voici l'uri : ", url, process.env.DB_URI)
         const client = new MongoClient(url, { useUnifiedTopology: true, useNewUrlParser: true })
         client.connect(function(err) {
             if (err) {
