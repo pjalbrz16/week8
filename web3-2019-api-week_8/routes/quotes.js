@@ -14,6 +14,7 @@ const db = require('../modules/db')
 
 // Find all quotes
 router.get('/', function(req, res, next) {
+	console.log("Coucou")
 	db.db.collection('quotes').find().toArray().then((quotes) => {
 		res.json(quotes)
 	}).catch((err) => {
