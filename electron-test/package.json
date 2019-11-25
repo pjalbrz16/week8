@@ -1,7 +1,6 @@
 {
   "name": "electron-test",
   "version": "1.0.0",
-  "description": "",
   "dependencies": {},
   "devDependencies": {
     "electron": "^7.1.1",
@@ -10,8 +9,23 @@
   },
   "main": "main.js",
   "scripts": {
-    "start": "electron ."
+    "start": "npm run-script remove-old-build && npm run-script build-react && npm run-script copy-logo && electron .",
+    "remove-old-build": "@powershell If(Test-Path -Path './build') {Remove-Item ./build -Recurse}",
+    "build-react": "cd ../web3-2019-webapp-week_7 && npm run-script build && move ./build ../electron-test && cd ../electron-test",
+    "copy-logo": "@powershell copy ./ipl_logo.jpg ./build",
+    "build-electron": "@powershell electron-builder.cmd",
+    "build": "npm run-script remove-old-build && npm run-script build-react && npm run-script copy-logo && npm run-script build-electron"
   },
   "author": "",
-  "license": "ISC"
+  "license": "ISC",
+  "description": "IPL electron test program"  ,
+  "build":{
+    "files": 
+      [
+        "**/*"
+      ],
+    "directories": {
+      "buildResources": "resources"
+    }
+  }
 }

@@ -53,7 +53,7 @@ class QuotePage extends React.Component {
         if (data.error)
           return alert ("Error:" + data.error)
         this.setState({quotes: data})
-        ipcRenderer.send(IPC_MAIN_QUOTES_CHANNEL, "Les notifications ont été chargées depuis mongodb")
+        ipcRenderer.send(IPC_MAIN_QUOTES_CHANNEL, "Les citations ont été chargées depuis mongodb")
       })
       .catch(err => {
         console.error("[Quotes] Error when fetching quotes API:", err)

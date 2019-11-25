@@ -19,10 +19,9 @@ function createWindow () {
     }
   })
 
-  mainWindow.setIcon('./ipl_logo.jpg', 'Overlay description')
-
+  // mainWindow.setIcon('./build/ipl_logo.jpg', 'Icon description')
   // and load the index.html of the app.
-  mainWindow.loadFile("../web3-2019-webapp-week_7/build/index.html")
+  mainWindow.loadFile("./build/index.html")
 
   // Open the DevTools.
   mainWindow.webContents.openDevTools()
