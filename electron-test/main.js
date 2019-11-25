@@ -116,3 +116,20 @@ ipcMain.on(channels.GalleryUploadProgressBar, (e, arg) => {
   mainWindow.setProgressBar(arg)
 })
 
+const menu = Menu.buildFromTemplate([
+  {
+    label:"Quitter",
+    submenu:[
+      {
+        label:"Fermer l'app",
+        accelerator:"CmdOrCtrl+Q",
+        click:() => {
+          mainWindow = null;
+          app.quit();
+        }
+      }
+    ]
+  }
+])
+
+Menu.setApplicationMenu(menu)
