@@ -19,6 +19,24 @@ function createWindow () {
     }
   })
 
+  const menu = Menu.buildFromTemplate([
+    {
+      label: "Quitter",
+      submenu:[
+        {
+          label:"Fermer l'app",
+          accelerator:"CmdOrCtrl+Q",
+          click:() => {
+            mainWindow = null
+            app.quit()
+          }
+        }
+      ]
+    }
+  ])
+
+  Menu.setApplicationMenu(menu)
+
   // mainWindow.setIcon('./build/ipl_logo.jpg', 'Icon description')
   // and load the index.html of the app.
   mainWindow.loadFile("./build/index.html")
@@ -44,6 +62,7 @@ const quitApp = (e) => {
     type: "question",
     title: "Vous êtes sur le point de quitter l'application",
     message: "Etes vous sur de vouloir quitter ?",
+    detail: "Appuyer sur Oui pour quitter",
     buttons: [
       "Non", "Oui"
     ],
