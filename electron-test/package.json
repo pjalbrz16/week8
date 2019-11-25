@@ -18,7 +18,7 @@
   },
   "author": "",
   "license": "ISC",
-  "description": "IPL electron test program"  ,
+  "description": "IPL electron test program",
   "build":{
     "files": 
       [
