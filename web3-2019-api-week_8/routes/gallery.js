@@ -14,6 +14,7 @@ const db = require("../modules/db");
 
 // GET /gallery : provides all gallery documents
 router.get("/", function(req, res) {
+	console.log("Coucou depuis gallery ")
   db.db
     .collection("gallery")
     .find()

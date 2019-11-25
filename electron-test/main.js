@@ -1,24 +1,35 @@
 // Modules to control application life and create native browser window
-const {app, BrowserWindow, protocol} = require('electron')
+const {app, BrowserWindow, ipcMain, dialog, Notification, globalShortcut, MenuItem, Menu}  = require('electron')
+const path = require('path')
+const channels = require("./constants")
 
 // Keep a global reference of the window object, if you don't, the window will
 // be closed automatically when the JavaScript object is garbage collected.
 let mainWindow
+let notification 
 
 function createWindow () {
   // Create the browser window.
   mainWindow = new BrowserWindow({
     width: 800,
     height: 600,
+    webPreferences:{
+      preload: path.join(__dirname, 'preload.js'),
+      nodeIntegration: true,
+    }
   })
 
+  mainWindow.setIcon('./ipl_logo.jpg', 'Overlay description')
+
   // and load the index.html of the app.
-  // mainWindow.loadFile('./build/index.html')
   mainWindow.loadFile("../web3-2019-webapp-week_7/build/index.html")
 
-
   // Open the DevTools.
-  // mainWindow.webContents.openDevTools()
+  mainWindow.webContents.openDevTools()
+
+  mainWindow.on('close', (e) =>  {
+    quitApp(e)
+  })
 
   // Emitted when the window is closed.
   mainWindow.on('closed', function () {
@@ -29,10 +40,33 @@ function createWindow () {
   })
 }
 
+const quitApp = (e) => {
+  let index = dialog.showMessageBoxSync(mainWindow, {
+    type: "question",
+    title: "Vous êtes sur le point de quitter l'application",
+    message: "Etes vous sur de vouloir quitter ?",
+    buttons: [
+      "Non", "Oui"
+    ],
+
+  })
+  if(index === 0){
+    e.preventDefault()
+  }
+}
+
 // This method will be called when Electron has finished
 // initialization and is ready to create browser windows.
 // Some APIs can only be used after this event occurs.
-app.on('ready', createWindow)
+app.on('ready', () => {
+  const ret = globalShortcut.register('CommandOrControl+C', () => {
+    app.quit()
+  })
+  if(!ret){
+    console.log('registration failed')
+  }
+  createWindow()
+})
 
 // Quit when all windows are closed.
 app.on('window-all-closed', function () {
@@ -47,6 +81,38 @@ app.on('activate', function () {
   if (mainWindow === null) createWindow()
 })
 
-// In this file you can include the rest of your app's specific main process
-// code. You can also put them in separate files and require them here.
+
+app.on('will-quit', () => {
+  globalShortcut.unregisterAll()
+})
+
+ipcMain.on(channels.QuotesChannel, (e, arg) => {
+  notification = new Notification()
+  notification.title = "Quotes"
+  notification.body = arg
+  notification.show()
+  notification.on("click", () => {
+    e.reply(channels.QuotesChannel, { author: "Notification", message: "Il était temps de me clicker dessus !" })
+  })
+})
+
+ipcMain.on(channels.GalleryChannel, (e, arg) => {
+  notification = new Notification()
+  notification.title = "Gallery"
+  notification.body = arg
+  notification.show()
+
+})
+
+ipcMain.on(channels.WebStatus, (e, arg) => {
+  notification = new Notification()
+  notification.title = "Etat du réseau"
+  notification.body = "La connection internet est passé " + arg
+  notification.show()
+})
+
+ipcMain.on(channels.GalleryUploadProgressBar, (e, arg) => {
+  console.log("Progress : ", arg)
+  mainWindow.setProgressBar(arg)
+})
 
