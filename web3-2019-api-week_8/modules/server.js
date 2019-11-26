@@ -43,7 +43,7 @@ app.use('/quotes', quotesRouter)
 // Start server
 var start = function (callback) {
     app.listen(port,  () => {
-        //console.info(`[Server] Listening on http://${host}:${port}`);
+        console.info(`[Server] Listening on http://${host}:${port}`);
         console.info(`[Server] Listening on ${port}`)
         if (callback) callback(null)
     })

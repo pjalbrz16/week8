@@ -1,5 +1,6 @@
 // Modules to control application life and create native browser window
-const {app, BrowserWindow, protocol} = require('electron')
+const {app, BrowserWindow, ipcMain, protocol} = require('electron')
+const electron = require('electron')
 
 // Keep a global reference of the window object, if you don't, the window will
 // be closed automatically when the JavaScript object is garbage collected.
@@ -12,13 +13,19 @@ function createWindow () {
     height: 600,
   })
 
+  // protocol.interceptFileProtocol("file", (request, result) => {
+  //   console.log("La requete File intercepté :", request, result)
+  //   return null
+  // })
+
+  
   // and load the index.html of the app.
   // mainWindow.loadFile('./build/index.html')
   mainWindow.loadFile("../web3-2019-webapp-week_7/build/index.html")
 
 
   // Open the DevTools.
-  // mainWindow.webContents.openDevTools()
+  mainWindow.webContents.openDevTools()
 
   // Emitted when the window is closed.
   mainWindow.on('closed', function () {
@@ -32,7 +39,13 @@ function createWindow () {
 // This method will be called when Electron has finished
 // initialization and is ready to create browser windows.
 // Some APIs can only be used after this event occurs.
-app.on('ready', createWindow)
+app.on('ready', () => {
+  protocol.registerHttpProtocol("127.0.0.1:8080", (request, callback) => {
+    console.log("RegisterStringProtocol", request, callback)
+    callback({url="127.0.0.1", method="GET"})
+  })
+  createWindow()
+})
 
 // Quit when all windows are closed.
 app.on('window-all-closed', function () {
@@ -50,3 +63,6 @@ app.on('activate', function () {
 // In this file you can include the rest of your app's specific main process
 // code. You can also put them in separate files and require them here.
 
+ipcMain.on('channel1', (message) => {
+  console.log("Reception d un message du renderer", message)
+})
