@@ -1,5 +1,7 @@
 import React from "react";
 import Gallery from "./Gallery";
+const { ipcRenderer } = window.require('electron')
+
 
 // Understanding CORS Ajax issues : https://stackoverflow.com/questions/21854516/understanding-ajax-cors-and-security-considerations
 // & https://developer.mozilla.org/en-US/docs/Web/HTTP/CORS
@@ -7,8 +9,8 @@ import Gallery from "./Gallery";
 // Check Proxying API Requests in Development :
 // https://create-react-app.dev/docs/proxying-api-requests-in-development
 
-
-const GALLERY_API_URL = "/api/gallery/";
+const GALLERY_API_URL = "http://127.0.0.1:8080/gallery/"
+const IPC_MAIN_GALLERY_CHANNEL = "GalleryChannel"
 
 const DEFAULT_ITEMS = [
     {
@@ -157,7 +159,7 @@ class GalleryContainer extends React.Component {
       this._addFormItemToItems(newItem);
       this._resetFormItem();
         
-      
+      ipcRenderer.send(IPC_MAIN_GALLERY_CHANNEL, "Vous venez d'ajouter une nouvelle image")
     }
     catch(err){
       console.error("saveNewItem : Error when fetching gallery API :", err);
@@ -244,6 +246,9 @@ class GalleryContainer extends React.Component {
         console.error("deleteItem : Error when fetching gallery API :", err);
         alert("Your item has not been deleted from the DB. Error when contacting the API : " + err);
       } 
+
+      ipcRenderer.send(IPC_MAIN_GALLERY_CHANNEL, "Vous venez de supprimer une image")
+
   }
 
   async updateItem(item_id) {

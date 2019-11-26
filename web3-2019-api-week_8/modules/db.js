@@ -9,9 +9,9 @@ const MongoClient = mongodb.MongoClient
  * Variables
  */
 // Connection URL
-const url = process.env.DB_URI
+const url = process.env.MONGODB_URI
 // Database Name
-const dbName = process.env.DB_NAME
+const dbName = process.env.DB_DB
 
 
 

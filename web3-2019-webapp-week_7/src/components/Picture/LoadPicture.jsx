@@ -1,8 +1,7 @@
 import React, {useState} from "react";
 import { Image, Col } from "react-bootstrap";
 import {extractFileContent} from "../../utils/FileLibrary"
-// const MAX_SIZE=1048576;
-const MAX_SIZE=4000000;
+const MAX_SIZE=104857600000;
 
 const LoadPicture = ({setNewItemInternalPicture}) => {
    let labelFileInput = React.createRef(); 
